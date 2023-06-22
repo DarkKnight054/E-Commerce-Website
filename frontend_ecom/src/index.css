@@ -1,0 +1,42 @@
+main {
+  min-height: 80vh;
+}
+.rating span {
+  margin: 0.05rem;
+}
+h1{
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+h2{
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
+}
+h3 {
+  padding: 1rem 0;
+}
+
+.nav_bar {
+  background: green !important;
+}
+
+.light_green {
+  background: rgb(23, 48, 23) !important;
+}
+
+
+.white {
+  color: white !important;
+}
+
+.background_white {
+  background: white !important;
+}
+
+.green {
+  color: green;
+}
+
+.black {
+  color: black !important;
+}

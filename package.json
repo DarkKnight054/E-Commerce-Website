@@ -1,0 +1,51 @@
+{
+  "name": "api-mern-ecom",
+  "version": "1.0.0",
+  "description": "MERN ecom app",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend_ecom/server",
+    "ecom_server": "nodemon backend_ecom/server",
+    "ecom_client": "npm start --prefix frontend_ecom",
+    "bank_server": "nodemon backend_bank/server",
+    "bank_client": "npm start --prefix frontend_bank",
+    "seller_server": "nodemon backend_seller/server",
+    "seller_client": "npm start --prefix frontend_seller",
+    "dev": "concurrently \"npm run ecom_server\" \"npm run ecom_client\" \"npm run bank_server\" \"npm run bank_client\" \"npm run seller_server\" \"npm run seller_client\" ",
+    "data:importEcom": "node backend_ecom/seeder",
+    "data:destroyEcom": "node backend_ecom/seeder -d",
+    "data:importSeller": "node backend_seller/seeder",
+    "data:destroySeller": "node backend_seller/seeder -d",
+    "data:importBank": "node backend_bank/seeder",
+    "data:destroyBank": "node backend_bank/seeder -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mashfy/API-MERN-Ecommerce.git"
+  },
+  "author": "Mashfy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mashfy/API-MERN-Ecommerce/issues"
+  },
+  "homepage": "https://github.com/Mashfy/API-MERN-Ecommerce#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.5",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "react-youtube": "^7.13.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1",
+    "nodemon": "^2.0.16"
+  }
+}
