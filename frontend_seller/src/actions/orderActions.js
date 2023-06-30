@@ -1,23 +1,23 @@
 import axios from 'axios';
 import { CART_CLEAR_ITEMS } from '../constants/cartConstants';
 import {
+  ORDER_CREATE_FAIL,
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
-  ORDER_CREATE_FAIL,
-  ORDER_DETAILS_FAIL,
-  ORDER_DETAILS_SUCCESS,
-  ORDER_DETAILS_REQUEST,
-  ORDER_PAY_FAIL,
-  ORDER_PAY_SUCCESS,
-  ORDER_PAY_REQUEST,
-  ORDER_LIST_MY_REQUEST,
-  ORDER_LIST_MY_SUCCESS,
-  ORDER_LIST_MY_FAIL,
-  ORDER_LIST_SUCCESS,
-  ORDER_LIST_FAIL,
+  ORDER_DELIVER_FAIL,
   ORDER_DELIVER_REQUEST,
   ORDER_DELIVER_SUCCESS,
-  ORDER_DELIVER_FAIL,
+  ORDER_DETAILS_FAIL,
+  ORDER_DETAILS_REQUEST,
+  ORDER_DETAILS_SUCCESS,
+  ORDER_LIST_FAIL,
+  ORDER_LIST_MY_FAIL,
+  ORDER_LIST_MY_REQUEST,
+  ORDER_LIST_MY_SUCCESS,
+  ORDER_LIST_SUCCESS,
+  ORDER_PAY_FAIL,
+  ORDER_PAY_REQUEST,
+  ORDER_PAY_SUCCESS,
 } from '../constants/orderConstants';
 
 export const createOrder = (order) => async (dispatch, getState) => {
@@ -155,10 +155,10 @@ export const listOrders = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/api/orders`,
+      `http://127.0.0.1:8000/api/orders/orderList`,
       config
     );
-
+    console.log(data);
     dispatch({
       type: ORDER_LIST_SUCCESS,
       payload: data,

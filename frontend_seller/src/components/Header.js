@@ -3,7 +3,7 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../actions/userActions';
-import '../index.css'
+import '../index.css';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -26,6 +26,13 @@ const Header = () => {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
               {userInfo ? (
+                <div style={{display: 'flex'}}>
+                <LinkContainer to='/orders'>
+                  <Nav.Link>
+                    <i className='fas fa-shopping-cart'></i> Orders
+                  </Nav.Link>
+                </LinkContainer>
+                <div style={{width: '30px'}}></div>
                 <NavDropdown title={userInfo.name} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -34,6 +41,7 @@ const Header = () => {
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>
+                </div>
               ) : (
                 <LinkContainer to='/login'>
                   <Nav.Link>

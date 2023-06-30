@@ -1,6 +1,5 @@
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
-import User from '../models/userModel.js';
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
@@ -13,14 +12,11 @@ const protect = asyncHandler(async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET_SELLER);
-
-      req.user = await User.findById(decoded.id).select('-password');
-
+      console.log('Tokenization' + token);
       next();
     } catch (error) {
-      console.error(error);
-      res.status(401);
-      throw new Error('Not authorized, token failed');
+      res.status(401).send(error);
+      throw new Error('Not authorized, token failed' + error);
     }
   }
 
@@ -40,3 +36,4 @@ const seller = (req, res, next) => {
 };
 
 export { protect, seller };
+

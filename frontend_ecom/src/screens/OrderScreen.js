@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -11,17 +12,16 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
+  deliverOrder,
   getOrderDetails,
   payOrder,
-  deliverOrder,
 } from '../actions/orderActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import axios from 'axios';
 
 import {
-  ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
+  ORDER_PAY_RESET,
 } from '../constants/orderConstants';
 
 const OrderScreen = ({ match }) => {
@@ -73,7 +73,7 @@ const OrderScreen = ({ match }) => {
     userInfo,
     navigate,
   ]);
-
+  let TotalPrice = 1.5;
   const payNowHandlerforadmin = async (total_price) => {
     const paymentdata = {
       email: order.user.email,
@@ -81,6 +81,7 @@ const OrderScreen = ({ match }) => {
       amount: total_price,
       receiver_account_number: '111423192491172311192292132523',
     };
+    TotalPrice = total_price;
     try {
       const bank_api_call = axios.post(
         `http://127.0.0.1:7000/bankapi/payment/`,
@@ -126,7 +127,38 @@ const OrderScreen = ({ match }) => {
     dispatch(deliverOrder(order));
   };
 
-  return loading ? (
+  // seller to accept the order
+  //{
+  
+  const [sellerOrder, setSellerOrder ] = useState();
+  useEffect(()=>{
+    try{
+      const fetchData = async()=>{
+        if (typeof order !== 'undefined' && order !== null) {
+          const {sellerEcomID} = order;
+          const {data} = await axios.get(`http://127.0.0.1:8000/api/orders/${sellerEcomID}`);
+          const {isPaid} = data;
+          setSellerOrder(data);
+        }
+      }
+      fetchData();
+    } catch(error){
+      console.log(error);
+    }
+
+  },[order]);
+
+
+
+
+
+  //}
+
+
+
+
+
+  return loading || !sellerOrder || sellerOrder === undefined? (
     <Loader />
   ) : error ? (
     <Message variant='danger'>{error}</Message>
@@ -260,8 +292,9 @@ const OrderScreen = ({ match }) => {
                     );
                     payNowHandlerforseller(order.itemsPrice);
                   }}
+                  disabled={sellerOrder[0].isPaid === false||sellerOrder[0].totalPrice===-1}
                 >
-                  Pay Now
+                  {sellerOrder[0].totalPrice===-1?'Order Rejected':(sellerOrder[0].isPaid===true?'Pay Now':'waiting for seller to accept the order')}
                </Button>
               </ListGroup.Item>
             )}

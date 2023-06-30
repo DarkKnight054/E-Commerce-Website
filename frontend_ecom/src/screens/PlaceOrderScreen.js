@@ -40,8 +40,14 @@ const PlaceOrderScreen = () => {
     }
     // eslint-disable-next-line
   }, [history, success]);
-
+  const getRandomInteger = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
   const placeOrderHandler = () => {
+    const sellerEcomID = getRandomInteger(1,100000000);
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
@@ -51,6 +57,7 @@ const PlaceOrderScreen = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
+        sellerEcomID: sellerEcomID,
       })
     );
   };

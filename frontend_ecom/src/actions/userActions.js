@@ -89,7 +89,6 @@ export const register =
         { name, email, account_number, password },
         config
       );
-
       dispatch({
         type: USER_REGISTER_SUCCESS,
         payload: data,

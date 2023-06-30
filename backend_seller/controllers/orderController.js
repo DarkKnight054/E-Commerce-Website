@@ -13,6 +13,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     taxPrice,
     shippingPrice,
     totalPrice,
+    sellerEcomID,
   } = req.body;
 
   if (orderItems && orderItems.length === 0) {
@@ -22,30 +23,29 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } else {
     const order = new Order({
       orderItems,
-      user: req.user._id,
       shippingAddress,
       paymentMethod,
       itemsPrice,
       taxPrice,
       shippingPrice,
+      sellerEcomID,
       totalPrice,
     });
 
     const createdOrder = await order.save();
-
+    
     res.status(201).json(createdOrder);
   }
 });
 
 // @desc    Get order by ID
-// @route   GET /api/orders/:id
+// @route   GET /api/orders/:sellerEcomID
 // @access  Private
-const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email account_number"
-  );
-
+const getOrderBy_sellerEcomID = asyncHandler(async (req, res) => {
+  const {sellerEcomID} = req.params;
+  console.log(sellerEcomID);
+  const condition ={ 'sellerEcomID' : sellerEcomID}
+  const order = await Order.find(condition);
   if (order) {
     res.json(order);
   } else {
@@ -59,7 +59,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-
+  
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
@@ -73,18 +73,59 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     const updatedOrder = await order.save();
 
     res.json(updatedOrder);
+
+    res.json(updatedOrder);
   } else {
     res.status(404);
     throw new Error("Order not found");
   }
 });
 
+// @desc    Update order to accept
+// @route   GET /api/orders/:id/accept
+// @access  Private
+const updateOrderToAccept = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  
+  if (order) {
+    order.isPaid = true;
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
+// @desc    Update order to reject
+// @route   GET /api/orders/:id/reject
+// @access  Private
+const updateOrderToReject = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  
+  if (order) {
+    order.totalPrice = -1;
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
+
 // @desc    Update order to delivered
 // @route   GET /api/orders/:id/deliver
 // @access  Private/Admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-
+  
   if (order) {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
@@ -102,7 +143,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate("user", "id name");
+  const orders = await Order.find();
   res.json(orders);
 });
 
@@ -115,10 +156,6 @@ const getMyOrders = asyncHandler(async (req, res) => {
 });
 
 export {
-  addOrderItems,
-  getOrderById,
-  updateOrderToPaid,
-  updateOrderToDelivered,
-  getOrders,
-  getMyOrders,
+  addOrderItems, getMyOrders, getOrderBy_sellerEcomID, getOrders, updateOrderToAccept, updateOrderToDelivered, updateOrderToPaid, updateOrderToReject
 };
+
